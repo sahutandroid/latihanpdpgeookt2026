@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz Interaktif: Sumber Hutan di Malaysia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        forest: {
+                            50: '#f2f9f4',
+                            100: '#e1f2e5',
+                            200: '#c4e5cd',
+                            500: '#2ecc71',
+                            600: '#27ae60',
+                            700: '#1e8449',
+                            800: '#145a32',
+                            900: '#0d381e',
+                            950: '#072011',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f8f5;
+        }
+        .correct-bg {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+        }
+        .incorrect-bg {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-btn.selected-yes {
+            background-color: #059669;
+            color: white;
+            border-color: #047857;
+        }
+        .option-btn.selected-no {
+            background-color: #dc2626;
+            color: white;
+            border-color: #b91c1c;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="bg-forest-900 text-white shadow-lg sticky top-0 z-50 border-b-4 border-forest-500">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-forest-600 p-2.5 rounded-xl shadow-inner">
+                    <i class="fa-solid fa-tree text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Kuiz Interaktif Sumber Hutan</h1>
+                    <p class="text-xs md:text-sm text-forest-200">Geografi Malaysia / Pengurusan Sumber Hutan</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 bg-forest-950/60 px-4 py-2 rounded-lg border border-forest-700/50">
+                <i class="fa-solid fa-graduation-cap text-forest-500"></i>
+                <span class="text-sm font-semibold text-forest-100">Jumlah Soalan: <span class="text-white font-bold">17 Item</span></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow space-y-8">
+
+        <!-- Banner Arahan -->
+        <div class="bg-gradient-to-r from-forest-800 to-forest-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                <i class="fa-solid fa-leaf text-9xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-forest-200 mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-forest-500"></i> Arahan Pelajar:
+            </h2>
+            <p class="text-sm md:text-base text-forest-100 leading-relaxed">
+                Jawab semua soalan di Bahagian 1, Bahagian 2, dan Bahagian 3. Setelah selesai, tekan butang 
+                <span class="bg-forest-600 text-white font-bold px-2 py-0.5 rounded text-xs uppercase tracking-wide">Hantar & Semak Markah</span> 
+                di bahagian bawah halaman untuk melihat jumlah keputusan dan maklum balas jawapan anda.
+            </p>
+        </div>
+
+        <form id="quizForm" onsubmit="calculateScore(event)" class="space-y-8">
+
+            <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                    <span class="bg-forest-100 text-forest-800 font-extrabold text-sm px-3 py-1.5 rounded-lg border border-forest-200">
+                        Bahagian 1
+                    </span>
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900">
+                        Isi Tempat Kosong: Maksud Sumber Hutan
+                    </h3>
+                </div>
+
+                <div class="bg-forest-50/60 p-5 rounded-xl border border-forest-100 mb-6">
+                    <p class="text-xs font-semibold text-forest-800 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Bank Kata Kunci Pilihan:
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs md:text-sm font-medium text-forest-900">
+                        <span class="bg-white px-3 py-1 rounded-md border border-forest-200 shadow-sm">flora</span>
+                        <span class="bg-white px-3 py-1 rounded-md border border-forest-200 shadow-sm">fauna</span>
+                        <span class="bg-white px-3 py-1 rounded-md border border-forest-200 shadow-sm">semula jadi</span>
+                        <span class="bg-white px-3 py-1 rounded-md border border-forest-200 shadow-sm">kayu-kayan</span>
+                        <span class="bg-white px-3 py-1 rounded-md border border-forest-200 shadow-sm">ekosistem</span>
+                    </div>
+                </div>
+
+                <div class="text-slate-700 text-base md:text-lg leading-loose space-y-4 font-normal">
+                    <p>
+                        Sumber hutan merujuk kepada seksyen 
+                        <span class="inline-block relative">
+                            <input type="text" id="b1_q1" required placeholder="(1)" class="w-32 md:w-36 px-3 py-1 text-center font-semibold bg-slate-50 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 transition">
+                            <span id="feedback_b1_q1" class="text-xs block font-bold mt-1 text-center"></span>
+                        </span> 
+                        (tumbuhan) dan 
+                        <span class="inline-block relative">
+                            <input type="text" id="b1_q2" required placeholder="(2)" class="w-32 md:w-36 px-3 py-1 text-center font-semibold bg-slate-50 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 transition">
+                            <span id="feedback_b1_q2" class="text-xs block font-bold mt-1 text-center"></span>
+                        </span> 
+                        (haiwan) yang hidup secara 
+                        <span class="inline-block relative">
+                            <input type="text" id="b1_q3" required placeholder="(3)" class="w-36 md:w-40 px-3 py-1 text-center font-semibold bg-slate-50 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 transition">
+                            <span id="feedback_b1_q3" class="text-xs block font-bold mt-1 text-center"></span>
+                        </span> 
+                        di kawasan hutan. Ia merupakan khazanah alam yang membekalkan pelbagai hasil 
+                        <span class="inline-block relative">
+                            <input type="text" id="b1_q4" required placeholder="(4)" class="w-36 md:w-40 px-3 py-1 text-center font-semibold bg-slate-50 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 transition">
+                            <span id="feedback_b1_q4" class="text-xs block font-bold mt-1 text-center"></span>
+                        </span> 
+                        serta berkeupayaan mengimbangi 
+                        <span class="inline-block relative">
+                            <input type="text" id="b1_q5" required placeholder="(5)" class="w-36 md:w-40 px-3 py-1 text-center font-semibold bg-slate-50 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 transition">
+                            <span id="feedback_b1_q5" class="text-xs block font-bold mt-1 text-center"></span>
+                        </span> 
+                        bumi.
+                    </p>
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                    <span class="bg-forest-100 text-forest-800 font-extrabold text-sm px-3 py-1.5 rounded-lg border border-forest-200">
+                        Bahagian 2
+                    </span>
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900">
+                        Klasifikasi: Tandakan (/) pada Sumber Hutan dan (x) pada Bukan Sumber Hutan
+                    </h3>
+                </div>
+
+                <p class="text-sm text-slate-600 mb-6">
+                    Pilih tanda <strong class="text-forest-700 font-bold font-mono">(/) Ya</strong> jika tumbuhan/elemen tersebut merupakan sumber hutan semula jadi, atau <strong class="text-red-600 font-bold font-mono">(x) Tidak</strong> jika ia bukan sumber hutan.
+                </p>
+
+                <div id="part2Container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dinamik dimasukkan oleh JavaScript -->
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+                    <span class="bg-forest-100 text-forest-800 font-extrabold text-sm px-3 py-1.5 rounded-lg border border-forest-200">
+                        Bahagian 3
+                    </span>
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900">
+                        Isi Tempat Kosong: 4 Kepentingan Pengurusan Sumber Hutan di Malaysia
+                    </h3>
+                </div>
+
+                <p class="text-sm text-slate-600 mb-6">
+                    Sila taipkan jawapan tepat berdasarkan 4 kepentingan utama pengurusan sumber hutan:
+                </p>
+
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                        <label for="b3_q1" class="font-semibold text-slate-800 block text-sm md:text-base">
+                            1. Pengurusan hutan yang mampan amat penting untuk mengekalkan:
+                        </label>
+                        <input type="text" id="b3_q1" required placeholder="Taip jawapan (Contoh: keseimbangan ekosistem)..." class="w-full md:w-3/4 px-4 py-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 bg-white font-medium text-slate-800">
+                        <span id="feedback_b3_q1" class="text-xs block font-bold mt-1"></span>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                        <label for="b3_q2" class="font-semibold text-slate-800 block text-sm md:text-base">
+                            2. Hutan dipelihara untuk:
+                        </label>
+                        <input type="text" id="b3_q2" required placeholder="Taip jawapan (Contoh: menyediakan keperluan masyarakat setempat)..." class="w-full md:w-3/4 px-4 py-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 bg-white font-medium text-slate-800">
+                        <span id="feedback_b3_q2" class="text-xs block font-bold mt-1"></span>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                        <label for="b3_q3" class="font-semibold text-slate-800 block text-sm md:text-base">
+                            3. Hutan berpotensi tinggi untuk dibangunkan bagi menggalakkan:
+                        </label>
+                        <input type="text" id="b3_q3" required placeholder="Taip jawapan (Contoh: aktiviti ekopelancongan)..." class="w-full md:w-3/4 px-4 py-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 bg-white font-medium text-slate-800">
+                        <span id="feedback_b3_q3" class="text-xs block font-bold mt-1"></span>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                        <label for="b3_q4" class="font-semibold text-slate-800 block text-sm md:text-base">
+                            4. Hutan berfungsi untuk:
+                        </label>
+                        <input type="text" id="b3_q4" required placeholder="Taip jawapan (Contoh: membekalkan sumber bahan mentah)..." class="w-full md:w-3/4 px-4 py-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 bg-white font-medium text-slate-800">
+                        <span id="feedback_b3_q4" class="text-xs block font-bold mt-1"></span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center pt-4 pb-8">
+                <button type="submit" class="bg-gradient-to-r from-forest-600 to-forest-800 hover:from-forest-700 hover:to-forest-900 text-white font-extrabold text-lg px-10 py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition duration-200 flex items-center justify-center gap-3 mx-auto">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Hantar & Semak Markah</span>
+                </button>
+            </div>
+        </form>
+
+        <div id="resultBox" class="hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-forest-500 transition-all duration-300">
+            <div class="text-center space-y-4">
+                <div id="badgeIcon" class="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                    <!-- Ikon Dinamik -->
+                </div>
+                <h3 id="resultTitle" class="text-2xl md:text-3xl font-extrabold"></h3>
+                <p id="resultSubtitle" class="text-slate-600 max-w-md mx-auto text-sm md:text-base"></p>
+
+                <div class="py-6 my-4 bg-forest-50 rounded-2xl border border-forest-100 max-w-lg mx-auto flex justify-around items-center">
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Markah Keseluruhan</span>
+                        <span id="scoreText" class="text-3xl md:text-4xl font-extrabold text-forest-800">0 / 17</span>
+                    </div>
+                    <div class="w-px h-12 bg-forest-200"></div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Peratusan</span>
+                        <span id="percentageText" class="text-3xl md:text-4xl font-extrabold text-forest-600">0%</span>
+                    </div>
+                </div>
+
+                <button onclick="resetQuiz()" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Cuba Lagi</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-forest-950 text-forest-300 text-xs py-6 border-t border-forest-800 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-center space-y-2">
+            <p class="font-semibold text-forest-100">© Kuiz Interaktif Sumber Hutan di Malaysia</p>
+            <p>Direka khusus untuk pembelajaran interaktif Geografi secara mampan.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data bagi Bahagian 2
+        const part2Data = [
+            { id: 'p2_1', name: 'Pokok Cengal', correct: 'ya', icon: 'fa-tree' },
+            { id: 'p2_2', name: 'Pokok Meranti', correct: 'ya', icon: 'fa-leaf' },
+            { id: 'p2_3', name: 'Rotan', correct: 'ya', icon: 'fa-scroll' },
+            { id: 'p2_4', name: 'Tongkat Ali', correct: 'ya', icon: 'fa-plant-wilt' },
+            { id: 'p2_5', name: 'Kelapa Sawit', correct: 'tidak', icon: 'fa-oil-can' },
+            { id: 'p2_6', name: 'Getah', correct: 'tidak', icon: 'fa-bottle-droplet' },
+            { id: 'p2_7', name: 'Padi', correct: 'tidak', icon: 'fa-wheat-awn' },
+            { id: 'p2_8', name: 'Bunga Kertas', correct: 'tidak', icon: 'fa-fan' }
+        ];
+
+        // Penyimpanan pilihan Bahagian 2
+        const part2Answers = {};
+
+        // Paparkan item Bahagian 2
+        function renderPart2() {
+            const container = document.getElementById('part2Container');
+            container.innerHTML = part2Data.map((item, index) => `
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex items-center justify-between gap-4" id="card_${item.id}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-forest-100 text-forest-800 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <span class="font-semibold text-slate-800 text-sm md:text-base">${index + 1}. ${item.name}</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button type="button" onclick="selectPart2('${item.id}', 'ya')" id="btn_${item.id}_ya" 
+                            class="option-btn px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-sm text-slate-700 hover:border-forest-600">
+                            (/) Ya
+                        </button>
+                        <button type="button" onclick="selectPart2('${item.id}', 'tidak')" id="btn_${item.id}_tidak" 
+                            class="option-btn px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-sm text-slate-700 hover:border-red-600">
+                            (x) Tidak
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectPart2(id, choice) {
+            part2Answers[id] = choice;
+            const btnYa = document.getElementById(`btn_${id}_ya`);
+            const btnTidak = document.getElementById(`btn_${id}_tidak`);
+
+            if (choice === 'ya') {
+                btnYa.className = 'option-btn px-3 py-1.5 rounded-lg border font-bold text-sm selected-yes';
+                btnTidak.className = 'option-btn px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-sm text-slate-700';
+            } else {
+                btnTidak.className = 'option-btn px-3 py-1.5 rounded-lg border font-bold text-sm selected-no';
+                btnYa.className = 'option-btn px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-sm text-slate-700';
+            }
+        }
+
+        // Normalisasi teks untuk semakan ejaan
+        function normalizeText(text) {
+            return text.toLowerCase().trim().replace(/\s+/g, ' ');
+        }
+
+        // Pengiraan markah keseluruhan
+        function calculateScore(event) {
+            event.preventDefault();
+
+            let score = 0;
+            const total = 17;
+
+            // --- EVALUASI BAHAGIAN 1 ---
+            const part1Answers = {
+                b1_q1: ['flora'],
+                b1_q2: ['fauna'],
+                b1_q3: ['semula jadi', 'semulajadi'],
+                b1_q4: ['kayu-kayan', 'kayu kayan', 'kayu'],
+                b1_q5: ['ekosistem']
+            };
+
+            for (const [id, validAnswers] of Object.entries(part1Answers)) {
+                const inputEl = document.getElementById(id);
+                const feedbackEl = document.getElementById(`feedback_${id}`);
+                const userVal = normalizeText(inputEl.value);
+
+                if (validAnswers.some(ans => normalizeText(ans) === userVal)) {
+                    score++;
+                    inputEl.className = 'w-32 md:w-36 px-3 py-1 text-center font-semibold border-2 rounded-lg correct-bg text-emerald-900';
+                    feedbackEl.textContent = '✓ Betul';
+                    feedbackEl.className = 'text-xs block font-bold mt-1 text-emerald-600';
+                } else {
+                    inputEl.className = 'w-32 md:w-36 px-3 py-1 text-center font-semibold border-2 rounded-lg incorrect-bg text-red-900';
+                    feedbackEl.textContent = `✗ Jawapan: ${validAnswers[0]}`;
+                    feedbackEl.className = 'text-xs block font-bold mt-1 text-red-600';
+                }
+            }
+
+            // --- EVALUASI BAHAGIAN 2 ---
+            part2Data.forEach(item => {
+                const cardEl = document.getElementById(`card_${item.id}`);
+                const userChoice = part2Answers[item.id];
+
+                if (userChoice === item.correct) {
+                    score++;
+                    cardEl.className = 'p-4 rounded-xl border border-emerald-300 bg-emerald-50/60 flex items-center justify-between gap-4';
+                } else {
+                    cardEl.className = 'p-4 rounded-xl border border-red-300 bg-red-50/60 flex items-center justify-between gap-4';
+                }
+            });
+
+            // --- EVALUASI BAHAGIAN 3 (Skema Tepat yang Ditetapkan) ---
+            const part3Answers = {
+                b3_q1: 'keseimbangan ekosistem',
+                b3_q2: 'menyediakan keperluan masyarakat setempat',
+                b3_q3: 'aktiviti ekopelancongan',
+                b3_q4: 'membekalkan sumber bahan mentah'
+            };
+
+            for (const [id, targetAnswer] of Object.entries(part3Answers)) {
+                const inputEl = document.getElementById(id);
+                const feedbackEl = document.getElementById(`feedback_${id}`);
+                const userVal = normalizeText(inputEl.value);
+                const normalizedTarget = normalizeText(targetAnswer);
+
+                if (userVal === normalizedTarget) {
+                    score++;
+                    inputEl.className = 'w-full md:w-3/4 px-4 py-2 border-2 rounded-lg font-medium correct-bg text-emerald-900';
+                    feedbackEl.textContent = '✓ Tepat sekali!';
+                    feedbackEl.className = 'text-xs block font-bold mt-1 text-emerald-600';
+                } else {
+                    inputEl.className = 'w-full md:w-3/4 px-4 py-2 border-2 rounded-lg font-medium incorrect-bg text-red-900';
+                    feedbackEl.textContent = `✗ Jawapan Tepat: ${targetAnswer}`;
+                    feedbackEl.className = 'text-xs block font-bold mt-1 text-red-600';
+                }
+            }
+
+            // Pengiraan Peratusan
+            const percentage = Math.round((score / total) * 100);
+
+            document.getElementById('scoreText').textContent = `${score} / ${total}`;
+            document.getElementById('percentageText').textContent = `${percentage}%`;
+
+            const badgeIcon = document.getElementById('badgeIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+
+            if (percentage >= 80) {
+                badgeIcon.className = 'w-20 h-20 rounded-full flex items-center justify-center mx-auto text-3xl bg-emerald-100 text-emerald-600 shadow-inner';
+                badgeIcon.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+                resultTitle.textContent = 'Tahniah & Cemerlang!';
+                resultTitle.className = 'text-2xl md:text-3xl font-extrabold text-emerald-700';
+                resultSubtitle.textContent = 'Anda menguasai topik Sumber Hutan di Malaysia dengan sangat cemerlang!';
+            } else if (percentage >= 50) {
+                badgeIcon.className = 'w-20 h-20 rounded-full flex items-center justify-center mx-auto text-3xl bg-amber-100 text-amber-600 shadow-inner';
+                badgeIcon.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+                resultTitle.textContent = 'Keputusan Baik!';
+                resultTitle.className = 'text-2xl md:text-3xl font-extrabold text-amber-700';
+                resultSubtitle.textContent = 'Pencapaian yang memuaskan. Sila semak jawapan yang salah untuk penambahbaikan.';
+            } else {
+                badgeIcon.className = 'w-20 h-20 rounded-full flex items-center justify-center mx-auto text-3xl bg-rose-100 text-rose-600 shadow-inner';
+                badgeIcon.innerHTML = '<i class="fa-solid fa-book-open"></i>';
+                resultTitle.textContent = 'Boleh Diperbaiki!';
+                resultTitle.className = 'text-2xl md:text-3xl font-extrabold text-rose-700';
+                resultSubtitle.textContent = 'Jangan putus asa. Sila baca semula nota sumber hutan dan cuba lagi!';
+            }
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.classList.remove('hidden');
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Reset kuiz
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            for (let key in part2Answers) delete part2Answers[key];
+            
+            renderPart2();
+
+            ['b1_q1', 'b1_q2', 'b1_q3', 'b1_q4', 'b1_q5'].forEach(id => {
+                const el = document.getElementById(id);
+                el.className = 'w-32 md:w-36 px-3 py-1 text-center font-semibold bg-slate-50 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 transition';
+                document.getElementById(`feedback_${id}`).textContent = '';
+            });
+
+            ['b3_q1', 'b3_q2', 'b3_q3', 'b3_q4'].forEach(id => {
+                const el = document.getElementById(id);
+                el.className = 'w-full md:w-3/4 px-4 py-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-forest-600 bg-white font-medium text-slate-800';
+                document.getElementById(`feedback_${id}`).textContent = '';
+            });
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            renderPart2();
+        };
+    </script>
+</body>
+</html>
